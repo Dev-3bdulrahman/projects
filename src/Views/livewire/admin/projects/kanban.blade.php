@@ -13,6 +13,9 @@
             <a href="{{ route('admin.projects.timesheet', $project->id) }}" class="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                 <span>{{ __('projects::projects.timesheet') }}</span>
             </a>
+            <a href="{{ route('admin.projects.milestones', $project->id) }}" class="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                <span>{{ __('projects::projects.milestones') }}</span>
+            </a>
             <button wire:click="openCreateModal('todo')"
                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -172,6 +175,17 @@
                                     </select>
                                     @error('assigned_to') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Milestone</label>
+                                <select wire:model="milestone_id" class="w-full py-2 px-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                                    <option value="">No Milestone</option>
+                                    @foreach($milestones as $milestone)
+                                        <option value="{{ $milestone->id }}">{{ $milestone->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('milestone_id') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                             </div>
                         </div>
                     </div>

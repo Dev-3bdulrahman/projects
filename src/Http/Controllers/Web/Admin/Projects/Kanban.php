@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Dev3bdulrahman\Projects\Models\Project;
 use Dev3bdulrahman\Projects\Models\Task;
+use Dev3bdulrahman\Projects\Models\Milestone;
 use Dev3bdulrahman\Projects\Services\ProjectsService;
 use App\Models\User;
 
@@ -16,6 +17,7 @@ class Kanban extends Component
 
     // Task form fields
     public $taskId = null;
+    public $milestone_id = null;
     public $name = '';
     public $description = '';
     public $status = 'todo';
@@ -31,13 +33,13 @@ class Kanban extends Component
     public function mount($project)
     {
         $this->projectId = $project;
-        $this->project = Project::with('tasks')->findOrFail($this->projectId);
+        $this->project = Project::with('tasks.milestone')->findOrFail($this->projectId);
     }
 
     public function moveTask(ProjectsService $service, $taskId, $newStatus)
     {
         $service->updateTaskStatus($taskId, $newStatus);
-        $this->project = Project::with('tasks')->findOrFail($this->projectId);
+        $this->project = Project::with('tasks.milestone')->findOrFail($this->projectId);
     }
 
     public function openCreateModal($status = 'todo')
@@ -52,6 +54,7 @@ class Kanban extends Component
         $this->resetForm();
         $task = Task::findOrFail($id);
         $this->taskId = $task->id;
+        $this->milestone_id = $task->milestone_id;
         $this->name = $task->name;
         $this->description = $task->description ?? '';
         $this->status = $task->status;
@@ -64,6 +67,7 @@ class Kanban extends Component
     public function resetForm()
     {
         $this->taskId = null;
+        $this->milestone_id = null;
         $this->name = '';
         $this->description = '';
         $this->status = 'todo';
@@ -81,6 +85,7 @@ class Kanban extends Component
             'priority' => 'required|in:low,medium,high,urgent',
             'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:users,id',
+            'milestone_id' => 'nullable|exists:project_milestones,id',
         ]);
 
         $validated['project_id'] = $this->projectId;
@@ -93,7 +98,7 @@ class Kanban extends Component
 
         $this->showTaskModal = false;
         $this->resetForm();
-        $this->project = Project::with('tasks')->findOrFail($this->projectId);
+        $this->project = Project::with('tasks.milestone')->findOrFail($this->projectId);
     }
 
     public function deleteTask(ProjectsService $service, $id)
@@ -101,7 +106,7 @@ class Kanban extends Component
         $targetId = is_array($id) ? ($id['id'] ?? null) : $id;
         if ($targetId) {
             $service->deleteTask($targetId);
-            $this->project = Project::with('tasks')->findOrFail($this->projectId);
+            $this->project = Project::with('tasks.milestone')->findOrFail($this->projectId);
         }
     }
 
@@ -114,12 +119,15 @@ class Kanban extends Component
         $reviewTasks = $this->project->tasks()->where('status', 'review')->get();
         $doneTasks = $this->project->tasks()->where('status', 'done')->get();
 
+        $milestones = Milestone::where('project_id', $this->projectId)->get();
+
         return view('projects::livewire.admin.projects.kanban', [
             'users' => $users,
             'todoTasks' => $todoTasks,
             'inProgressTasks' => $inProgressTasks,
             'reviewTasks' => $reviewTasks,
             'doneTasks' => $doneTasks,
+            'milestones' => $milestones,
         ])->title($this->project->name . ' - ' . __('projects::projects.kanban'));
     }
 }

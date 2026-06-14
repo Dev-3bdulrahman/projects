@@ -32,5 +32,6 @@ class ProjectsServiceProvider extends ServiceProvider
         Livewire::component('projects-kanban', \Dev3bdulrahman\Projects\Http\Controllers\Web\Admin\Projects\Kanban::class);
         Livewire::component('projects-timesheet', \Dev3bdulrahman\Projects\Http\Controllers\Web\Admin\Projects\Timesheet::class);
         Livewire::component('projects-expenses', \Dev3bdulrahman\Projects\Http\Controllers\Web\Admin\Projects\Expenses::class);
+        Livewire::component('projects-milestones', \Dev3bdulrahman\Projects\Http\Controllers\Web\Admin\Projects\Milestones::class);
     }
 }
