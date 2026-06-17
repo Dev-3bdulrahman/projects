@@ -2,7 +2,7 @@
     "name": "dev-3bdulrahman/projects",
     "description": "A Project Management module for Laravel ERP — projects, tasks, kanban, timesheets & expenses.",
     "type": "library",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "license": "MIT",
     "authors": [
         {
