@@ -1,0 +1,11 @@
+{
+    "name": "Projects",
+    "slug": "projects",
+    "version": "1.0.0",
+    "description": "Project & Task Management",
+    "description_ar": "إدارة المشاريع والمهام",
+    "is_active": true,
+    "provider": "Dev3bdulrahman\\Projects\\ProjectsServiceProvider",
+    "dependencies": [],
+    "order": 7
+}
